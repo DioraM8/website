@@ -544,7 +544,7 @@
                     </div>
                     
                     <div class="assignment-item">
-                        <a href="file:///C:/Users/win/Downloads/dungeon-crawl-assignment.html" class="assignment-link">Assignment 2</a>
+                        <a href="https://dioram8.github.io/assignment2/" class="assignment-link">Assignment 2</a>
                     </div>
                     
                     <div class="assignment-item">
