@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>github</title>
 <meta name="generator" content="Jekyll v3.10.0" />
 <meta property="og:title" content="github" />
 <meta property="og:locale" content="en_US" />
@@ -39,7 +38,6 @@
       <h1><a href="https://dioram8.github.io/github/">github</a></h1>
       
 
-      <p>&lt;!DOCTYPE html&gt;</p>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -548,7 +546,7 @@
                     </div>
                     
                     <div class="assignment-item">
-                        <a href="https://drive.google.com/drive/folders/1NiWr6MC1IktlPcXPBEHMnrXVkMK0a1eC?usp=drive_link" class="assignment-link">Assignment 3</a>
+                        <a href="https://dioram8.github.io/assignment3/" class="assignment-link">Assignment 3</a>
                     </div>
                     
                     <div class="assignment-item">
