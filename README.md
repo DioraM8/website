@@ -1,10 +1,50 @@
-<html lang="en">
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>website</title>
+<meta name="generator" content="Jekyll v3.10.0" />
+<meta property="og:title" content="website" />
+<meta property="og:locale" content="en_US" />
+<link rel="canonical" href="https://dioram8.github.io/website/" />
+<meta property="og:url" content="https://dioram8.github.io/website/" />
+<meta property="og:site_name" content="website" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="website" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebSite","headline":"website","name":"website","url":"https://dioram8.github.io/website/"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <link rel="stylesheet" href="/website/assets/css/style.css?v=36cb51a06640e0903773793c3b20792f64362ef8">
+    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
+
+<!-- Setup Google Analytics -->
+
+
+
+<!-- You can set your favicon here -->
+<!-- link rel="shortcut icon" type="image/x-icon" href="/website/favicon.ico" -->
+
+<!-- end custom head snippets -->
+
+  </head>
+  <body>
+    <div class="container-lg px-3 my-5 markdown-body">
+      
+      <h1><a href="https://dioram8.github.io/website/">website</a></h1>
+      
+
+      <html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Diyora's Assignment Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -472,7 +512,7 @@
 
             // Animate progress bar on load
             setTimeout(() => {
-                document.querySelector('.progress-bar').style.width = '30%';
+                document.querySelector('.progress-bar').style.width = '25%';
             }, 500);
             
             // Update stats to reflect new number of assignments
@@ -503,11 +543,11 @@
                                 <div class="stat-label">Assignments</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">4</div>
+                                <div class="stat-value">3</div>
                                 <div class="stat-label">Completed</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">8</div>
+                                <div class="stat-value">9</div>
                                 <div class="stat-label">Upcoming</div>
                             </div>
                         </div>
@@ -515,7 +555,7 @@
                         <div class="progress-container">
                             <div class="progress-label">
                                 <span>Course Progress</span>
-                                <span>30%</span>
+                                <span>25%</span>
                             </div>
                             <div class="progress-track">
                                 <div class="progress-bar"></div>
@@ -641,4 +681,12 @@
         </div>
     </footer>
 </body>
+</html>
+
+
+      
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
+    <script>anchors.add();</script>
+  </body>
 </html>
