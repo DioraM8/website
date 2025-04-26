@@ -1,49 +1,10 @@
-<html lang="en-US">
-  <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v3.10.0" />
-<meta property="og:title" content="website" />
-<meta property="og:locale" content="en_US" />
-<link rel="canonical" href="https://dioram8.github.io/website/" />
-<meta property="og:url" content="https://dioram8.github.io/website/" />
-<meta property="og:site_name" content="website" />
-<meta property="og:type" content="website" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="website" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","headline":"website","name":"website","url":"https://dioram8.github.io/website/"}</script>
-<!-- End Jekyll SEO tag -->
-
-    <link rel="stylesheet" href="/website/assets/css/style.css?v=36cb51a06640e0903773793c3b20792f64362ef8">
-    <!-- start custom head snippets, customize with your own _includes/head-custom.html file -->
-
-<!-- Setup Google Analytics -->
-
-
-
-<!-- You can set your favicon here -->
-<!-- link rel="shortcut icon" type="image/x-icon" href="/website/favicon.ico" -->
-
-<!-- end custom head snippets -->
-
-  </head>
-  <body>
-    <div class="container-lg px-3 my-5 markdown-body">
-      
-      <h1><a href="https://dioram8.github.io/website/">website</a></h1>
-      
-
-      <html lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Diyora's Assignment Portal</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
@@ -448,6 +409,24 @@
             transition: width 1.5s ease;
         }
 
+        /* Added: Google Script Form Styles */
+        .google-script-container {
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .google-script-frame {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
         /* Media Queries */
         @media (max-width: 768px) {
             .profile-stats {
@@ -464,6 +443,10 @@
             
             .card-body {
                 padding: 20px;
+            }
+            
+            .google-script-frame {
+                height: 700px;
             }
         }
 
@@ -483,6 +466,39 @@
 
         ::-webkit-scrollbar-thumb:hover {
             background: var(--primary-hover);
+        }
+    
+        /* Fixed Grade Summary Box */
+        #grade-summary-box {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(167, 112, 255, 0.5);
+            cursor: pointer;
+            z-index: 1000;
+            color: white;
+            font-family: 'Syne', sans-serif;
+            transition: all 0.3s ease;
+            min-width: 150px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        #grade-summary-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 20px rgba(167, 112, 255, 0.8);
+            background: rgba(15, 15, 30, 0.9);
+        }
+
+        #grade-summary-box .grade-percentage {
+            font-size: 20px;
+            font-weight: bold;
+            color: var(--primary);
+            margin-top: 5px;
         }
     </style>
     <script>
@@ -516,10 +532,52 @@
             
             // Update stats to reflect new number of assignments
             document.querySelector('.stat-value').textContent = '12';
+            
+            // Fetch grades data and update grade summary box
+            fetchGrades();
         });
+        
+        // Function to fetch grades from Google Script
+        function fetchGrades() {
+            const gradesUrl = "https://script.google.com/macros/s/AKfycbzl5muotqZ6wYv5LKIf_fHQ6d46Qday8QAKqLc8H9phdKibwJ7UBdDp3o2-xxC4lkNnqg/exec";
+            
+            fetch(gradesUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const summary = data.summary;
+                    const summaryBox = document.getElementById('grade-summary-box');
+                    
+                    if (summaryBox) {
+                        summaryBox.innerHTML = `
+                            <strong>Grade Summary</strong>
+                            <div class="grade-percentage">${summary.percentage}</div>
+                            <div>${summary.fraction}</div>
+                        `;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching grades:', error);
+                    const summaryBox = document.getElementById('grade-summary-box');
+                    if (summaryBox) {
+                        summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>90.32% (29.00 / 32.00)';
+                    }
+                });
+        }
     </script>
 </head>
+
 <body>
+    <!-- Fixed Grade Summary Box -->
+    <div id="grade-summary-box" onclick="window.location.href='grades.html'">
+        <strong>Grade Summary</strong>
+        <div class="grade-percentage">Loading...</div>
+    </div>
+
     <div class="animated-bg"></div>
     
     <div class="navbar">
@@ -532,7 +590,7 @@
             <div class="card-header">Student Profile</div>
             <div class="card-body">
                 <div class="profile-section">
-                        <div class="profile-info">
+                    <div class="profile-info">
                         <h2>Diyora - Student No: 2417494</h2>
                         <p>IBM student at Dong-A University. Passionate about web development and creative coding.</p>
                         
@@ -666,13 +724,13 @@
             &copy; 2025 Diyora | Dong-A University
         </div>
         <div class="social-links">
-            <a href="#" title="GitHub">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="https://github.com/DioraM8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="https://github.com/DioraM8" title="GitHub">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
                 </svg>
             </a>
-            <a href="#" title="Email">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="diyoramuslimova7@gmail.com" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <a href="mailto:diyoramuslimova7@gmail.com" title="Email">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                     <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
@@ -680,12 +738,4 @@
         </div>
     </footer>
 </body>
-</html>
-
-
-      
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/anchor-js/4.1.0/anchor.min.js" integrity="sha256-lZaRhKri35AyJSypXXs4o6OPFTbTmUoltBbDCbdzegg=" crossorigin="anonymous"></script>
-    <script>anchors.add();</script>
-  </body>
 </html>
