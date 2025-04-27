@@ -539,7 +539,7 @@
         
         // Function to fetch grades from Google Script
         function fetchGrades() {
-            const gradesUrl = "https://dioram8.github.io/website/grades";
+            const gradesUrl = "https://dioram8.github.io/website/grades/";
             
             fetch(gradesUrl)
                 .then(response => {
@@ -652,7 +652,7 @@
                     </div>
                     
                     <div class="assignment-item active">
-                        <a href="https://drive.google.com/drive/folders/1NiWr6MC1IktlPcXPBEHMnrXVkMK0a1eC?usp=drive_link" class="assignment-link uploaded">
+                        <a href="https://docs.google.com/document/d/1Tqhs00YJ4h0CfNbVMjplhk5DSnopOU9jyMkuJUz7lC0/edit?usp=sharing" class="assignment-link uploaded">
                             Assignment 4
                             <span class="assignment-date">Due: Apr 1, 2025</span>
                         </a>
