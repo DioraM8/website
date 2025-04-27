@@ -573,7 +573,7 @@
 
 <body>
     <!-- Fixed Grade Summary Box -->
-    <div id="grade-summary-box" onclick="window.location.href='grades.html'">
+    <div id="grade-summary-box" onclick="window.location.href='https://dioram8.github.io/grades/'">
         <strong>Grade Summary</strong>
         <div class="grade-percentage">Loading...</div>
     </div>
