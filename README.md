@@ -659,7 +659,7 @@
                     </div>
                     
                     <div class="assignment-item">
-                        <a href="#" class="assignment-link">
+                        <a href="https://diiwonee.github.io/Cookies-Cryptography-Tool/" class="assignment-link uploaded">
                             Assignment 5
                             <span class="assignment-date">Due: Apr 15, 2025</span>
                         </a>
