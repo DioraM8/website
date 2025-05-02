@@ -600,11 +600,11 @@
                                 <div class="stat-label">Assignments</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">3</div>
+                                <div class="stat-value">4</div>
                                 <div class="stat-label">Completed</div>
                             </div>
                             <div class="stat">
-                                <div class="stat-value">9</div>
+                                <div class="stat-value">8</div>
                                 <div class="stat-label">Upcoming</div>
                             </div>
                         </div>
@@ -632,36 +632,43 @@
                 <div class="assignment-list">
                     <div class="assignment-item active">
                         <a href="https://docs.google.com/document/d/1z1v-lLQ0GKyZsSDASf-bf2dJ2qaiNxGvPdjN58VEEm0/edit?usp=drive_link" class="assignment-link uploaded">
-                            Assignment 1
+                            Assignment 1 (Week 2)
                             <span class="assignment-date">Due: Feb 15, 2025</span>
                         </a>
                     </div>
                     
                     <div class="assignment-item active">
                         <a href="https://dioram8.github.io/assignment2/" class="assignment-link uploaded">
-                            Assignment 2
+                            Assignment 2 (Week 3)
                             <span class="assignment-date">Due: Mar 1, 2025</span>
                         </a>
                     </div>
                     
                     <div class="assignment-item active">
                         <a href="https://dioram8.github.io/assignment3/" class="assignment-link uploaded">
-                            Assignment 3
+                            Assignment 3 (Week 4)
                             <span class="assignment-date">Due: Mar 15, 2025</span>
                         </a>
                     </div>
                     
                     <div class="assignment-item active">
                         <a href="https://docs.google.com/document/d/1Tqhs00YJ4h0CfNbVMjplhk5DSnopOU9jyMkuJUz7lC0/edit?usp=sharing" class="assignment-link uploaded">
-                            Assignment 4
+                            Assignment 4 (Week 7)
                             <span class="assignment-date">Due: Apr 1, 2025</span>
                         </a>
                     </div>
                     
                     <div class="assignment-item">
                         <a href="https://diiwonee.github.io/Cookies-Cryptography-Tool/" class="assignment-link uploaded">
-                            Assignment 5
+                            Project (Week 6)
                             <span class="assignment-date">Due: Apr 15, 2025</span>
+                        </a>
+                    </div>
+
+                    <div class="assignment-item">
+                        <a href="https://docs.google.com/document/d/19N2wdE0nuxms3SkNt9UcfTG3mjIN1FXmlT0nssgHWAs/edit?usp=drive_link" class="assignment-link uploaded">
+                            Assignment 5 (Week 6)
+                            <span class="assignment-date">Due: May 1, 2025</span>
                         </a>
                     </div>
                     
