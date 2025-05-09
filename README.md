@@ -539,7 +539,7 @@
         
         // Function to fetch grades from Google Script
         function fetchGrades() {
-            const gradesUrl = "https://script.google.com/macros/s/AKfycbxOOgVpQxyMZw8Tvx8v4A-Hqajy3UcFxCBdGDoPHxv13yFVzVulfYUlPMZVKztng1Ru5g/exec";
+            const gradesUrl = "https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec";
             
             fetch(gradesUrl)
                 .then(response => {
@@ -573,7 +573,7 @@
 
 <body>
     <!-- Fixed Grade Summary Box -->
-    <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbxOOgVpQxyMZw8Tvx8v4A-Hqajy3UcFxCBdGDoPHxv13yFVzVulfYUlPMZVKztng1Ru5g/exec'">
+    <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec'">
         <strong>Grade Summary</strong>
         <div class="grade-percentage">Loading...</div>
     </div>
