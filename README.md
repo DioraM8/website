@@ -539,7 +539,7 @@
         
         // Function to fetch grades from Google Script
         function fetchGrades() {
-            const gradesUrl = "https://dioram8.github.io/website/grades/";
+            const gradesUrl = "https://script.google.com/macros/s/AKfycbzl5muotqZ6wYv5LKIf_fHQ6d46Qday8QAKqLc8H9phdKibwJ7UBdDp3o2-xxC4lkNnqg/exec";
             
             fetch(gradesUrl)
                 .then(response => {
