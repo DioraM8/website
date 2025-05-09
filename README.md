@@ -652,7 +652,7 @@
                     </div>
                     
                     <div class="assignment-item active">
-                        <a href="https://docs.google.com/document/d/1Tqhs00YJ4h0CfNbVMjplhk5DSnopOU9jyMkuJUz7lC0/edit?usp=sharing" class="assignment-link uploaded">
+                        <a href="https://dioram8.github.io/week7/" class="assignment-link uploaded">
                             Assignment 4 (Week 7)
                             <span class="assignment-date">Due: Apr 1, 2025</span>
                         </a>
