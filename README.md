@@ -564,7 +564,7 @@
                     console.error('Error fetching grades:', error);
                     const summaryBox = document.getElementById('grade-summary-box');
                     if (summaryBox) {
-                        summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>74.0% (37.00 / 50.00)';
+                        summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>80.5% (50.75 / 63.00)';
                     }
                 });
         }
