@@ -573,7 +573,7 @@
 
 <body>
     <!-- Fixed Grade Summary Box -->
-    <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec'">
+    <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbwjROX-au-FaC_M5UKhp-boWTvfwDEhKHfNOM35sgjwrBiaHJQ_-5EfHAPBEwL9nTZCWw/exec'">
         <strong>Grade Summary</strong>
         <div class="grade-percentage">Loading...</div>
     </div>
