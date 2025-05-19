@@ -500,6 +500,115 @@
             color: var(--primary);
             margin-top: 5px;
         }
+
+        /* Login Section Styles */
+        #login-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        .form-header {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            letter-spacing: 2px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #f0f0f0, var(--primary));
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        #login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            width: 100%;
+            max-width: 400px;
+            background: rgba(15, 15, 30, 0.7);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        #login-form input {
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        #login-form input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(167, 112, 255, 0.3);
+        }
+
+        #login-form input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        #login-form button {
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        #login-form button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        #login-status {
+            margin-top: 20px;
+            color: #ff4d4d;
+            font-size: 14px;
+            height: 20px;
+        }
+
+        /* Main Content (hidden initially) */
+        #main-content {
+            display: none;
+        }
+
+        /* Logout Button */
+        .logout-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 15px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            color: white;
+            font-family: 'Syne', sans-serif;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .logout-btn:hover {
+            background: rgba(15, 15, 30, 0.9);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(167, 112, 255, 0.5);
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -525,169 +634,226 @@
                 animatedBg.appendChild(bubble);
             }
 
-            // Animate progress bar on load
-            setTimeout(() => {
-                document.querySelector('.progress-bar').style.width = '25%';
-            }, 500);
+            // Login functionality
+            const loginForm = document.getElementById('login-form');
+            const loginStatus = document.getElementById('login-status');
+            const mainContent = document.getElementById('main-content');
+            const loginSection = document.getElementById('login-section');
+            const logoutBtn = document.getElementById('logout-btn');
+
+            // Check if user is already logged in
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                showMainContent();
+            }
+
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                // Simple validation - in a real app, this would connect to a backend
+                if (email === 'diyoramuslimova7@gmail.com' && password === 'password123') {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    showMainContent();
+                } else {
+                    loginStatus.textContent = 'Invalid email or password. Please try again.';
+                }
+            });
+
+            logoutBtn.addEventListener('click', function() {
+                localStorage.removeItem('isLoggedIn');
+                hideMainContent();
+            });
+
+            function showMainContent() {
+                loginSection.style.display = 'none';
+                mainContent.style.display = 'block';
+                
+                // Animate progress bar on load after login
+                setTimeout(() => {
+                    document.querySelector('.progress-bar').style.width = '25%';
+                }, 500);
+                
+                // Update stats to reflect new number of assignments
+                document.querySelector('.stat-value').textContent = '12';
+                
+                // Fetch grades data and update grade summary box
+                fetchGrades();
+            }
+
+            function hideMainContent() {
+                loginSection.style.display = 'flex';
+                mainContent.style.display = 'none';
+            }
             
-            // Update stats to reflect new number of assignments
-            document.querySelector('.stat-value').textContent = '12';
-            
-            // Fetch grades data and update grade summary box
-            fetchGrades();
+            // Function to fetch grades from Google Script
+            function fetchGrades() {
+                const gradesUrl = "https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec";
+                
+                fetch(gradesUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const summary = data.summary;
+                        const summaryBox = document.getElementById('grade-summary-box');
+                        
+                        if (summaryBox) {
+                            summaryBox.innerHTML = `
+                                <strong>Grade Summary</strong>
+                                <div class="grade-percentage">${summary.percentage}</div>
+                                <div>${summary.fraction}</div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching grades:', error);
+                        const summaryBox = document.getElementById('grade-summary-box');
+                        if (summaryBox) {
+                            summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>80.5% (50.75 / 63.00)';
+                        }
+                    });
+            }
         });
-        
-        // Function to fetch grades from Google Script
-        function fetchGrades() {
-            const gradesUrl = "https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec";
-            
-            fetch(gradesUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const summary = data.summary;
-                    const summaryBox = document.getElementById('grade-summary-box');
-                    
-                    if (summaryBox) {
-                        summaryBox.innerHTML = `
-                            <strong>Grade Summary</strong>
-                            <div class="grade-percentage">${summary.percentage}</div>
-                            <div>${summary.fraction}</div>
-                        `;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching grades:', error);
-                    const summaryBox = document.getElementById('grade-summary-box');
-                    if (summaryBox) {
-                        summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>80.5% (50.75 / 63.00)';
-                    }
-                });
-        }
     </script>
 </head>
 
 <body>
-    <!-- Fixed Grade Summary Box -->
-    <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbwjROX-au-FaC_M5UKhp-boWTvfwDEhKHfNOM35sgjwrBiaHJQ_-5EfHAPBEwL9nTZCWw/exec'">
-        <strong>Grade Summary</strong>
-        <div class="grade-percentage">Loading...</div>
-    </div>
-
     <div class="animated-bg"></div>
-    
-    <div class="navbar">
-        <h1>Diyora's Assignment Portal</h1>
-    </div>
-    
-    <div class="container">
-        <!-- Profile Section -->
-        <div class="card">
-            <div class="card-header">Student Profile</div>
-            <div class="card-body">
-                <div class="profile-section">
-                    <div class="profile-info">
-                        <h2>Diyora - Student No: 2417494</h2>
-                        <p>IBM student at Dong-A University. Passionate about web development and creative coding.</p>
-                        
-                        <div class="profile-stats">
-                            <div class="stat">
-                                <div class="stat-value">12</div>
-                                <div class="stat-label">Assignments</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">4</div>
-                                <div class="stat-label">Completed</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">8</div>
-                                <div class="stat-label">Upcoming</div>
-                            </div>
-                        </div>
 
-                        <div class="progress-container">
-                            <div class="progress-label">
-                                <span>Course Progress</span>
-                                <span>25%</span>
+    <!-- Login Section (shown first) -->
+    <div id="login-section">
+        <h2 class="form-header">Login to Assignment Portal</h2>
+        <form id="login-form">
+            <input type="email" id="email" placeholder="Email" required />
+            <input type="password" id="password" placeholder="Password" required />
+            <button type="submit">Login</button>
+        </form>
+        <div id="login-status"></div>
+    </div>
+
+    <!-- Main Content (hidden initially) -->
+    <div id="main-content">
+        <!-- Fixed Grade Summary Box -->
+        <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbwjROX-au-FaC_M5UKhp-boWTvfwDEhKHfNOM35sgjwrBiaHJQ_-5EfHAPBEwL9nTZCWw/exec'">
+            <strong>Grade Summary</strong>
+            <div class="grade-percentage">Loading...</div>
+        </div>
+
+        <!-- Logout Button -->
+        <button class="logout-btn" id="logout-btn">Logout</button>
+    
+        <div class="navbar">
+            <h1>Diyora's Assignment Portal</h1>
+        </div>
+        
+        <div class="container">
+            <!-- Profile Section -->
+            <div class="card">
+                <div class="card-header">Student Profile</div>
+                <div class="card-body">
+                    <div class="profile-section">
+                        <div class="profile-info">
+                            <h2>Diyora - Student No: 2417494</h2>
+                            <p>IBM student at Dong-A University. Passionate about web development and creative coding.</p>
+                            
+                            <div class="profile-stats">
+                                <div class="stat">
+                                    <div class="stat-value">12</div>
+                                    <div class="stat-label">Assignments</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">4</div>
+                                    <div class="stat-label">Completed</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-value">8</div>
+                                    <div class="stat-label">Upcoming</div>
+                                </div>
                             </div>
-                            <div class="progress-track">
-                                <div class="progress-bar"></div>
+
+                            <div class="progress-container">
+                                <div class="progress-label">
+                                    <span>Course Progress</span>
+                                    <span>25%</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-bar"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- Assignment Collection Section -->
-        <div class="card">
-            <div class="card-header">Assignment Collection</div>
-            <div class="card-body">
-                <p>Track your assignment progress throughout the semester</p>
-                
-                <div class="assignment-list">
-                    <div class="assignment-item active">
-                        <a href="https://docs.google.com/document/d/1z1v-lLQ0GKyZsSDASf-bf2dJ2qaiNxGvPdjN58VEEm0/edit?usp=drive_link" class="assignment-link uploaded">
-                            Assignment 1 (Week 2)
-                            <span class="assignment-date">Due: Feb 15, 2025</span>
-                        </a>
-                    </div>
+            
+            <!-- Assignment Collection Section -->
+            <div class="card">
+                <div class="card-header">Assignment Collection</div>
+                <div class="card-body">
+                    <p>Track your assignment progress throughout the semester</p>
                     
-                    <div class="assignment-item active">
-                        <a href="https://dioram8.github.io/assignment2/" class="assignment-link uploaded">
-                            Assignment 2 (Week 3)
-                            <span class="assignment-date">Due: Mar 1, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <div class="assignment-item active">
-                        <a href="https://dioram8.github.io/assignment3/" class="assignment-link uploaded">
-                            Assignment 3 (Week 4)
-                            <span class="assignment-date">Due: Mar 15, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <div class="assignment-item active">
-                        <a href="https://dioram8.github.io/week7/" class="assignment-link uploaded">
-                            Assignment 4 (Week 7)
-                            <span class="assignment-date">Due: Apr 1, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <div class="assignment-item">
-                        <a href="https://diiwonee.github.io/Cookies-Cryptography-Tool/" class="assignment-link uploaded">
-                            Project (Week 6)
-                            <span class="assignment-date">Due: Apr 15, 2025</span>
-                        </a>
-                    </div>
+                    <div class="assignment-list">
+                        <div class="assignment-item active">
+                            <a href="https://docs.google.com/document/d/1z1v-lLQ0GKyZsSDASf-bf2dJ2qaiNxGvPdjN58VEEm0/edit?usp=drive_link" class="assignment-link uploaded">
+                                Assignment 1 (Week 2)
+                                <span class="assignment-date">Due: Feb 15, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item active">
+                            <a href="https://dioram8.github.io/assignment2/" class="assignment-link uploaded">
+                                Assignment 2 (Week 3)
+                                <span class="assignment-date">Due: Mar 1, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item active">
+                            <a href="https://dioram8.github.io/assignment3/" class="assignment-link uploaded">
+                                Assignment 3 (Week 4)
+                                <span class="assignment-date">Due: Mar 15, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item active">
+                            <a href="https://dioram8.github.io/week7/" class="assignment-link uploaded">
+                                Assignment 4 (Week 7)
+                                <span class="assignment-date">Due: Apr 1, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item">
+                            <a href="https://diiwonee.github.io/Cookies-Cryptography-Tool/" class="assignment-link uploaded">
+                                Project (Week 6)
+                                <span class="assignment-date">Due: Apr 15, 2025</span>
+                            </a>
+                        </div>
 
-                    <div class="assignment-item">
-                        <a href="https://docs.google.com/document/d/19N2wdE0nuxms3SkNt9UcfTG3mjIN1FXmlT0nssgHWAs/edit?usp=drive_link" class="assignment-link uploaded">
-                            Assignment 5 (Week 6)
-                            <span class="assignment-date">Due: May 1, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <div class="assignment-item">
-                        <a href="#" class="assignment-link">
-                            Assignment 6
-                            <span class="assignment-date">Due: May 1, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <!-- Added 6 more assignment buttons -->
-                    <div class="assignment-item">
-                        <a href="#" class="assignment-link">
-                            Assignment 7
-                            <span class="assignment-date">Due: May 15, 2025</span>
-                        </a>
-                    </div>
-                    
-                    <div class="assignment-item">
+                        <div class="assignment-item">
+                            <a href="https://docs.google.com/document/d/19N2wdE0nuxms3SkNt9UcfTG3mjIN1FXmlT0nssgHWAs/edit?usp=drive_link" class="assignment-link uploaded">
+                                Assignment 5 (Week 6)
+                                <span class="assignment-date">Due: May 1, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item">
+                            <a href="#" class="assignment-link">
+                                Assignment 6
+                                <span class="assignment-date">Due: May 1, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <!-- Added 6 more assignment buttons -->
+                        <div class="assignment-item">
+                            <a href="#" class="assignment-link">
+                                Assignment 7
+                                <span class="assignment-date">Due: May 15, 2025</span>
+                            </a>
+                        </div>
+                        
+                        <div class="assignment-item">
                         <a href="#" class="assignment-link">
                             Assignment 8
                             <span class="assignment-date">Due: Jun 1, 2025</span>
