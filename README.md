@@ -671,7 +671,7 @@
                 
                 // Animate progress bar on load after login
                 setTimeout(() => {
-                    document.querySelector('.progress-bar').style.width = '25%';
+                    document.querySelector('.progress-bar').style.width = '75%';
                 }, 500);
                 
                 // Update stats to reflect new number of assignments
@@ -766,11 +766,11 @@
                                     <div class="stat-label">Assignments</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-value">4</div>
+                                    <div class="stat-value">6</div>
                                     <div class="stat-label">Completed</div>
                                 </div>
                                 <div class="stat">
-                                    <div class="stat-value">8</div>
+                                    <div class="stat-value">6</div>
                                     <div class="stat-label">Upcoming</div>
                                 </div>
                             </div>
@@ -778,7 +778,7 @@
                             <div class="progress-container">
                                 <div class="progress-label">
                                     <span>Course Progress</span>
-                                    <span>25%</span>
+                                    <span>75%</span>
                                 </div>
                                 <div class="progress-track">
                                     <div class="progress-bar"></div>
