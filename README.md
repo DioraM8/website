@@ -839,8 +839,8 @@
                         </div>
                         
                         <div class="assignment-item">
-                            <a href="#" class="assignment-link">
-                                Assignment 6
+                            <a href="https://dioram8.github.io/project/" class="assignment-link uploaded">
+                                Project 2 (Week 11)
                                 <span class="assignment-date">Due: May 1, 2025</span>
                             </a>
                         </div>
