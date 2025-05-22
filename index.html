@@ -688,7 +688,7 @@
             
             // Function to fetch grades from Google Script
             function fetchGrades() {
-                const gradesUrl = "https://script.google.com/macros/s/AKfycbzg0U0TtnWe8DA-ib01L87wN9Va2sJFSdw5VggsJWt8eIYkjGHmhB9S-p13FyKVBD1Mnw/exec";
+                const gradesUrl = "https://script.google.com/macros/s/AKfycbxnZAcrmNIdknZXdWw4gNz4iQY_mEVSAoD6wq5Q292N2YNWSOT50aNoA9FSQ1Oh5sVkJg/exec";
                 
                 fetch(gradesUrl)
                     .then(response => {
@@ -713,7 +713,7 @@
                         console.error('Error fetching grades:', error);
                         const summaryBox = document.getElementById('grade-summary-box');
                         if (summaryBox) {
-                            summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>80.5% (50.75 / 63.00)';
+                            summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>89.2% (51.75 / 58.00)';
                         }
                     });
             }
