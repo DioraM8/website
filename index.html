@@ -688,7 +688,7 @@
             
             // Function to fetch grades from Google Script
             function fetchGrades() {
-                const gradesUrl = "https://script.google.com/macros/s/AKfycby1vtT8iQtl6sWiwmPyTxTfVORFavBXMgXl8SGs5dgA5guLgasib_J8_mtFMDIBW0OY4A/exec";
+                const gradesUrl = "https://script.google.com/macros/s/AKfycbwQj72YCog5fj_enqU22JbmGAOB2G8kOHm69KE2hShEM3xc38UXmryqg_RhYFoi3zAuHg/exec";
                 
                 fetch(gradesUrl)
                     .then(response => {
@@ -713,7 +713,7 @@
                         console.error('Error fetching grades:', error);
                         const summaryBox = document.getElementById('grade-summary-box');
                         if (summaryBox) {
-                            summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>89.2%';
+                            summaryBox.innerHTML = '<strong>Grade Summary</strong><br/>93.75%';
                         }
                     });
             }
@@ -738,7 +738,7 @@
     <!-- Main Content (hidden initially) -->
     <div id="main-content">
         <!-- Fixed Grade Summary Box -->
-        <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycby1vtT8iQtl6sWiwmPyTxTfVORFavBXMgXl8SGs5dgA5guLgasib_J8_mtFMDIBW0OY4A/exec'">
+        <div id="grade-summary-box" onclick="window.location.href='https://script.google.com/macros/s/AKfycbwQj72YCog5fj_enqU22JbmGAOB2G8kOHm69KE2hShEM3xc38UXmryqg_RhYFoi3zAuHg/exec'">
             <strong>Grade Summary</strong>
             <div class="grade-percentage">Loading...</div>
         </div>
