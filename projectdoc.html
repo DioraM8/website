@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Simulator Documentation</title>
+    <style>
+        :root {
+            --background: #121212;
+            --text: #e0e0e0;
+            --accent: #03DAC6;
+            --secondary: #BB86FC;
+            --danger: #CF6679;
+            --card-bg: #1e1e1e;
+            --terminal-bg: #0c0c0c;
+            --terminal-text: #00ff00;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--accent);
+            padding-bottom: 1rem;
+        }
+        
+        h1 {
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        h2 {
+            color: var(--secondary);
+            margin-top: 2rem;
+            border-bottom: 1px dashed var(--secondary);
+            padding-bottom: 0.5rem;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .feature-item {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent);
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .feature-title {
+            color: var(--accent);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .reflection-card {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        
+        .terminal {
+            background-color: var(--terminal-bg);
+            color: var(--terminal-text);
+            padding: 1rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            margin: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .terminal::before {
+            content: "$ ";
+        }
+        
+        .terminal-cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background-color: var(--terminal-text);
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        
+        @keyframes blink {
+            50% {
+                opacity: 0;
+            }
+        }
+        
+        .onion-visual {
+            display: flex;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .onion-layer {
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            position: relative;
+        }
+        
+        .layer-1 {
+            background: radial-gradient(circle, #2c3e50 0%, #1a2530 100%);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .layer-2 {
+            width: 225px;
+            height: 225px;
+            background: radial-gradient(circle, #34495e 0%, #2c3e50 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .layer-3 {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #4a6b8a 0%, #34495e 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .layer-4 {
+            width: 75px;
+            height: 75px;
+            background: radial-gradient(circle, #03DAC6 0%, #018786 100%);
+            position: relative;
+        }
+        
+        .network {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        
+        .node {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            box-shadow: 0 0 5px var(--accent);
+        }
+        
+        .connection {
+            position: absolute;
+            height: 1px;
+            background-color: rgba(3, 218, 198, 0.3);
+            transform-origin: left center;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 4rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--accent);
+            font-size: 0.9rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .risk-meter {
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(to right, 
+                #4CAF50 0%, 
+                #FFEB3B 50%, 
+                #F44336 100%);
+            border-radius: 15px;
+            margin: 2rem 0;
+            position: relative;
+        }
+        
+        .risk-pointer {
+            width: 10px;
+            height: 40px;
+            background-color: white;
+            position: absolute;
+            top: -5px;
+            left: 75%;
+            transform: translateX(-50%);
+            border-radius: 5px;
+        }
+        
+        .scam-game {
+            background-color: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .url-example {
+            font-family: 'Courier New', monospace;
+            color: var(--danger);
+            font-size: 1.2rem;
+            margin: 1rem 0;
+            word-break: break-all;
+        }
+        
+        .url-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .btn {
+            background-color: var(--card-bg);
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--accent);
+            color: var(--background);
+        }
+        
+        .btn-danger {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        
+        .btn-danger:hover {
+            background-color: var(--danger);
+            color: var(--background);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Dark Web Simulator</h1>
+            <div class="subtitle">A browser-based terminal for safely exploring the dark web concept</div>
+            
+            <div class="terminal">
+                navigate --to darkweb/documentation
+                <span class="terminal-cursor"></span>
+            </div>
+        </header>
+        
+        <div class="section">
+            <h2>Project Overview</h2>
+            <div class="reflection-card">
+                <p>I'm not entirely sure what I expected when I started messing around with this dark web simulation thing. Honestly, I just thought it would be a fun side project, maybe a small weekend experiment—something I could show off a bit but not take too seriously. But then... it kind of spiraled. In a good way.</p>
+                <p>So, I wanted to build this fake terminal that felt like you were exploring the dark web (safely, of course—nothing real, just vibes). I had no clue how to do half the stuff. Like, how do you make a terminal in a browser? Or simulate a .onion site analysis? I didn't know. But I figured I'd just start Googling things. And, well, that works surprisingly often.</p>
+            </div>
+        </div>
+        
+        <div class="onion-visual">
+            <div class="layer-1 onion-layer">
+                <div class="network">
+                    <!-- Nodes and connections will be added by JavaScript -->
+                </div>
+                <div class="layer-2 onion-layer">
+                    <div class="layer-3 onion-layer">
+                        <div class="layer-4 onion-layer"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Development Process</h2>
+            <div class="reflection-card">
+                <p>I found myself jumping between MDN docs, some random Stack Overflow threads that were barely related but somehow still helpful, and a few YouTube videos with those super low-effort text-to-speech narrations—yeah, those. They're weirdly calming, though. Anyway, I picked up little pieces here and there. Not everything made sense at first, and I probably overcomplicated things in the beginning. Or maybe not. Who knows?</p>
+                <p>Somewhere along the way, I started using AI tools. I know that sounds cliché now—"AI helped me build my project!"—but seriously, it made things a lot easier. I'd type something like "how do I simulate a risk analysis for fake URLs?" and boom, it would give me a pretty solid starting point.</p>
+                <p>At some point I looked at the clock and realized it had only been, like, 20 minutes. Maybe 25? That was the weird part. I had something that actually worked. Like, functional terminal commands, tooltips, even a sketchy little game where you guess if a site is a scam or not.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Information that you should know</h2>
+            <div class="reflection-card">
+                <p>The deep web is anything that can't be found by a search engine. Most of it is pretty boring since is just research papers or business related things but a tiny but of it is really interesting. Usually that interesting stuff is hosted on websites that require a program to access.</p>
+                <p>Tor is the most popular one and usually what people are talking about when they talk about the deep web. Websites that have .onion in the name are using the onion protocol and need Tor to access.</p>
+                <p>Most of the stuff you'll find is just old text files from the 80s but you'll also find illegal stuff from drug trafficking to arms deals to stolen data so be careful though you won't find that stuff unless you go looking for it.</p>
+                <p>While the dark web is often associated with illegal activities, there are also many legitimate and useful uses. Whistleblower platforms such as SecureDrop use onion websites to securely transmit confidential information. Human rights organizations also operate onion websites to communicate and disseminate information securely.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>.onion sites to use as example</h2>
+            <div class="reflection-card">
+                <p>In this section, I have listed the most popular resources on the Dark Web. Please note that you must take great care when using the Dark Web.</p>
+                <p>With this in mind, it is essential that you are careful about what you choose to visit and where you choose to click.</p>
+                <p>https://protonmailrmez3lotccipshtkleegetolb73fuirgj7r4o4vfu7ozyd.onion/</p>
+                <p>http://libraryfyuybp7oyidyya3ah5xvwgyx6weauoini7zyz555litmmumad.onion/</p>
+                <p>https://duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion/</p>
+                <p>https://www.facebookwkhpilnemxj7asaniu7vnjjbiltxjqhye3mhbshg7kx5tfyd.onion/</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>URL Risk Analysis</h2>
+            <div class="reflection-card">
+                <p>I still had to tweak it, obviously. The first few suggestions were way too polished or just didn't feel right. But once I added some messy logic, like checking if a domain had too many numbers or suspicious words like "wallet" or "btc", it started to feel more believable.</p>
+                
+                <div class="terminal">
+                    analyze --url darkwallets2btc.onion
+                </div>
+                
+                <div class="risk-meter">
+                    <div class="risk-pointer"></div>
+                </div>
+                
+                <p>Some parts feel clunky, and I'm still not sure if the risk analysis messages are too dramatic or too vague. I mean, what does "medium risk" even mean when it's all fake anyway? But it's convincing enough to make people pause and think for a second, which, I guess, is the point.</p>
+            </div>
+            
+            <div class="scam-game">
+                <h3>Scam Detection Game</h3>
+                <p>Guess whether this .onion URL is a scam or legitimate:</p>
+                <div class="url-example">wallet-secure-btc-transaction44.onion</div>
+                <div class="url-buttons">
+                    <button class="btn btn-danger">Scam</button>
+                    <button class="btn">Legitimate</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>PRD / Extensions</h2>
+            <p>Okay, so the core project works. But while I was building it, a bunch of "what if..." ideas kept popping into my head. Some of them might be overkill, and some—honestly—I just didn't have time (or energy) for. Still, here's a list of features I'd consider adding if I ever circle back to this.</p>
+            
+            <ul class="feature-list">
+                <li class="feature-item">
+                    <div class="feature-title">1. User Progress Tracking</div>
+                    <p>Wouldn't it be cool if the site remembered what commands you've used or how many scam sites you got right in the game? Like, maybe just storing that info locally, nothing fancy. I thought about using localStorage to do this, but at the time, it felt like... extra. But yeah, it could make the whole thing feel more alive, like it's reacting to you.</p>
+                </li>
+                
+                <li class="feature-item">
+                    <div class="feature-title">2. Hidden Content Discovery</div>
+                    <p>The dark web often contains hidden messages and encoded data..Practice your steganography and decoding skills with Base64 Decoder.</p>
+                </li>
+                
+                <li class="feature-item">
+                    <div class="feature-title">3. Command History with Arrow Keys</div>
+                    <p>Okay, so this is one of those little polish things. It bugged me that you couldn't press the Up arrow to go back through your previous commands—like in a real terminal. I kind of miss that muscle memory from working in the real command line. Might not be hard to add, but it didn't make the first cut.</p>
+                </li>
+                
+                <li class="feature-item">
+                    <div class="feature-title">4. Text-to-Speech Tooltips</div>
+                    <p>This one's half accessibility, half fun: imagine if the tooltip definitions could be read aloud. I mean, not everyone loves reading little pop-ups, and hearing "Tor is a privacy-focused network..." in a voice (even a robotic one) might actually make the info stick better. Not critical, but definitely a nice-to-have.</p>
+                </li>
+                
+                <li class="feature-item">
+                    <div class="feature-title">5. \.onion analyzer tool</div>
+                    <p>That is my main idea what I wanted to do in this project. I give some examples to understand more how it's gonna work.</p>
+                </li>
+                
+                <li class="feature-item">
+                    <div class="feature-title">6. Multiple Languages</div>
+                    <p>Now this would be really cool. I know people who'd love this in Korean, or maybe Uzbek (hi Mom). Translating the tooltip definitions and terminal responses wouldn't be too hard if I used a basic language switcher. The only issue? Maintenance. Every time I update the English version, I'd need to sync it in other languages too, and... yeah. That could get messy fast.</p>
+                </li>
+            </ul>
+            
+            <div class="reflection-card">
+                <p>I'm not saying I'll do all of these. Some of them might never happen, and that's fine. But it's fun to think about how far this little fake terminal thing could go if I keep tinkering with it. Who knows—maybe version 2.0 will be even cooler. Or weirder. Or both.</p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>Conclusion</h2>
+            <div class="reflection-card">
+                <p>If I'm being honest, I learned more than I expected. Not just about coding—though yeah, I picked up a few neat tricks—but also about how much you can actually do with just a browser, some curiosity, and a bit of guidance.</p>
+                <p>I used every source read reddit many times to gain more information and honestly, I'm proud of what I did.</p>
+                <p>Through this project I had some problems as well, but I tried to improve them with my knowledge and of course help of AI tools.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Dark Web Simulator Documentation - Created on May 19, 2025</p>
+        </footer>
+    </div>
+
+    <script>
+        // Create network visualization
+        function createNetwork() {
+            const network = document.querySelector('.network');
+            const nodeCount = 30;
+            const connectionCount = 40;
+            
+            // Create nodes
+            for (let i = 0; i < nodeCount; i++) {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.style.left = `${Math.random() * 100}%`;
+                node.style.top = `${Math.random() * 100}%`;
+                network.appendChild(node);
+            }
+            
+            const nodes = document.querySelectorAll('.node');
+            
+            // Create connections
+            for (let i = 0; i < connectionCount; i++) {
+                const connection = document.createElement('div');
+                connection.className = 'connection';
+                
+                const startNode = nodes[Math.floor(Math.random() * nodes.length)];
+                const endNode = nodes[Math.floor(Math.random() * nodes.length)];
+                
+                const startRect = startNode.getBoundingClientRect();
+                const endRect = endNode.getBoundingClientRect();
+                const networkRect = network.getBoundingClientRect();
+                
+                const startX = (startRect.left + startRect.width / 2) - networkRect.left;
+                const startY = (startRect.top + startRect.height / 2) - networkRect.top;
+                const endX = (endRect.left + endRect.width / 2) - networkRect.left;
+                const endY = (endRect.top + endRect.height / 2) - networkRect.top;
+                
+                const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+                
+                connection.style.width = `${length}px`;
+                connection.style.left = `${startX}px`;
+                connection.style.top = `${startY}px`;
+                connection.style.transform = `rotate(${angle}deg)`;
+                
+                network.appendChild(connection);
+            }
+        }
+        
+        // Terminal cursor blinking effect
+        function animateTerminal() {
+            const terminals = document.querySelectorAll('.terminal');
+            terminals.forEach(terminal => {
+                if (!terminal.querySelector('.terminal-cursor')) {
+                    const cursor = document.createElement('span');
+                    cursor.className = 'terminal-cursor';
+                    terminal.appendChild(cursor);
+                }
+            });
+        }
+        
+        // Initialize visualizations
+        window.addEventListener('load', () => {
+            createNetwork();
+            animateTerminal();
+            
+            // Randomize risk pointer position on load
+            const riskPointer = document.querySelector('.risk-pointer');
+            if (riskPointer) {
+                riskPointer.style.left = `${Math.random() * 100}%`;
+            }
+        });
+    </script>
+</body>
+</html>
