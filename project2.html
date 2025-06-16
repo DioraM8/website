@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Analysis Training</title>
+    <style>
+        :root {
+            --bg-color: #0a0a0a;
+            --text-color: #33ff00;
+            --accent-color: #ff3333;
+            --secondary-color: #004d00;
+            --terminal-bg: #0d0d0d;
+            --terminal-text: #33ff00;
+            --terminal-header: #222;
+            --warning-color: #ff3333;
+            --info-color: #33ccff;
+            --safe-color: #00cc00;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .glitch-title {
+            font-size: 2.5rem;
+            margin: 0;
+            text-shadow: 2px 2px 10px var(--text-color);
+            position: relative;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-top: 10px;
+        }
+        
+        .section {
+            margin-bottom: 50px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--secondary-color);
+            border-radius: 5px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            margin-top: 0;
+            border-bottom: 1px solid var(--text-color);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        
+        .terminal {
+            background-color: var(--terminal-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            margin-top: 20px;
+        }
+        
+        .terminal-header {
+            background-color: var(--terminal-header);
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .terminal-title {
+            font-weight: bold;
+            color: #ffffff;
+        }
+        
+        .terminal-buttons {
+            display: flex;
+        }
+        
+        .terminal-button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        
+        .tb-red { background-color: #ff5f56; }
+        .tb-yellow { background-color: #ffbd2e; }
+        .tb-green { background-color: #27c93f; }
+        
+        .terminal-content {
+            padding: 15px;
+            height: 300px;
+            overflow-y: auto;
+            color: var(--terminal-text);
+        }
+        
+        .terminal-input {
+            display: flex;
+            padding: 0 15px 15px;
+            align-items: center;
+        }
+        
+        .prompt {
+            color: var(--text-color);
+            margin-right: 10px;
+        }
+        
+        .cmd-input {
+            background-color: transparent;
+            border: none;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            width: 100%;
+            outline: none;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background-color: var(--text-color);
+            animation: blink 1s infinite;
+            margin-left: -10px;
+        }
+        
+        .output-line {
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+        
+        .command {
+            color: #ffcc00;
+        }
+        
+        .info {
+            color: var(--info-color);
+        }
+        
+        .warning {
+            color: var(--warning-color);
+        }
+        
+        .term {
+            color: #ff9900;
+            text-decoration: underline;
+            cursor: help;
+        }
+        
+        .tooltip {
+            position: absolute;
+            background-color: #111;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--info-color);
+            z-index: 100;
+            max-width: 300px;
+            display: none;
+            box-shadow: 0 0 10px rgba(0, 204, 255, 0.5);
+        }
+        
+        .tooltip-title {
+            color: var(--info-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+            border-bottom: 1px solid var(--info-color);
+            padding-bottom: 5px;
+        }
+        
+        .interactive-game {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .game-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .game-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            grid-gap: 20px;
+        }
+        
+        .game-site {
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 5px;
+            padding: 15px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .game-site:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+        }
+        
+        .site-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        
+        .safe {
+            background-color: var(--safe-color);
+            color: #000;
+            display: none;
+        }
+        
+        .scam {
+            background-color: var(--warning-color);
+            color: #fff;
+            display: none;
+        }
+        
+        .site-url {
+            font-family: 'Courier New', monospace;
+            color: #00aaff;
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+        
+        .site-content {
+            padding: 10px;
+            background-color: #0d0d0d;
+            border: 1px solid #333;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            color: #ddd;
+        }
+        
+        .site-features {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        .analyzer {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 5px;
+        }
+        
+        .analyzer-input {
+            display: flex;
+            margin: 20px 0;
+        }
+        
+        .analyzer-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            background-color: #111;
+            color: var(--text-color);
+            border-radius: 3px 0 0 3px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .analyzer-input button {
+            padding: 10px 20px;
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            border-radius: 0 3px 3px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .analyzer-input button:hover {
+            background-color: #006600;
+        }
+        
+        .analyzer-results {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .progress-container {
+            height: 10px;
+            background-color: #111;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--text-color);
+            border-radius: 5px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .risk-level {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+        
+        .risk-meter {
+            height: 10px;
+            background-color: #111;
+            border-radius: 5px;
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .risk-indicator {
+            height: 20px;
+            width: 20px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            position: absolute;
+            top: -5px;
+            left: 0;
+            transition: left 0.5s;
+        }
+        
+        .risk-indicator.low {
+            left: 10%;
+            background-color: var(--safe-color);
+        }
+        
+        .risk-indicator.medium {
+            left: 50%;
+            background-color: #ffcc00;
+        }
+        
+        .risk-indicator.high {
+            left: 90%;
+            background-color: var(--warning-color);
+        }
+        
+        .risk-detail {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: #0d0d0d;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--secondary-color);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+        }
+        
+        .modal-title {
+            margin-top: 0;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--secondary-color);
+            color: var(--text-color);
+        }
+        
+        .code-section {
+            background-color: #000;
+            padding: 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+        
+        .risk-assessment {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        
+        .reveal-btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .reveal-btn:hover {
+            background-color: #006600;
+        }
+        
+        .reveal-btn:disabled {
+            background-color: #333;
+            cursor: not-allowed;
+        }
+        
+        .base64-section {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            border: 1px solid #333;
+        }
+        
+        .base64-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #111;
+            border: 1px solid #333;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .base64-output {
+            display: none;
+            padding: 10px;
+            background-color: #000;
+            border: 1px solid #333;
+            margin-top: 10px;
+            color: #ddd;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+        }
+        
+        .hover-area {
+            padding: 15px;
+            text-align: center;
+            background-color: #111;
+            margin: 20px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #666;
+            position: relative;
+        }
+        
+        .hidden-message {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #111;
+            border: 1px solid var(--info-color);
+            border-radius: 5px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        .disclaimer {
+            background-color: rgba(255, 0, 0, 0.1);
+            color: #ff9999;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 40px 0 20px;
+            border: 1px solid rgba(255, 0, 0, 0.3);
+            font-size: 0.9rem;
+        }
+        
+        .external-link {
+            color: var(--info-color);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--info-color);
+            padding-bottom: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .external-link:hover {
+            color: var(--accent-color);
+            border-bottom-color: var(--accent-color);
+        }
+        
+        .project-link {
+            display: block;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: rgba(51, 204, 255, 0.1);
+            border: 1px solid var(--info-color);
+            border-radius: 5px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .project-link:hover {
+            background-color: rgba(51, 204, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(51, 204, 255, 0.3);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px 0;
+            border-top: 1px solid var(--secondary-color);
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .game-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .terminal-content {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 class="glitch-title">DARK WEB ANALYSIS TRAINING</h1>
+            <p class="subtitle">Learn to navigate and analyze hidden services safely</p>
+        </header>
+
+        <!-- Project Link Section -->
+        <div class="section">
+            <h2 class="section-title">Project Documentation</h2>
+            <a href="projectdoc.html" class="project-link external-link" target="_blank">
+                <span class="info">Visit Project Documentation Site</span>
+                <div>https://dioram8.github.io/projectdoc/</div>
+            </a>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Terminal Access</h2>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-title">TOR Network Terminal</div>
+                    <div class="terminal-buttons">
+                        <div class="terminal-button tb-red"></div>
+                        <div class="terminal-button tb-yellow"></div>
+                        <div class="terminal-button tb-green"></div>
+                    </div>
+                </div>
+                <div class="terminal-content" id="terminal-content">
+                    <div class="output-line">Welcome to the <span class="term" data-term="tor">TOR</span> Network Terminal Interface...</div>
+                    <div class="output-line">Initializing secure connection... <span class="info">CONNECTED</span></div>
+                    <div class="output-line">Type '<span class="command">help</span>' for available commands.</div>
+                </div>
+                <div class="terminal-input">
+                    <span class="prompt">root@onion:~$</span>
+                    <input type="text" class="cmd-input" id="cmd-input" spellcheck="false" autocomplete="off">
+                    <span class="cursor"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Suspicious Site Detection Game</h2>
+            <div class="interactive-game">
+                <div class="game-header">
+                    <h3>Can you identify which sites are legitimate and which are scams?</h3>
+                    <p>Click on a site to analyze its features and make your decision.</p>
+                </div>
+                <div class="game-container">
+                    <div class="game-site" data-is-scam="true">
+                        <span class="site-badge safe">Safe</span>
+                        <span class="site-badge scam">Scam!</span>
+                        <div class="site-url">darkwallt3xrqdvc.onion</div>
+                        <div class="site-content">
+                            Welcome to Dark Wallet - The most secure cryptocurrency wallet on the darknet! 
+                            SPECIAL OFFER: Deposit 0.1 BTC now and receive 0.5 BTC in return!
+                        </div>
+                        <div class="site-features">
+                            <p>• Created: 2 weeks ago</p>
+                            <p>• No SSL certificate</p>
+                            <p>• Mentions "urgent" offer</p>
+                            <p>• Similar to legitimate "DarkWallet" but slightly misspelled</p>
+                        </div>
+                    </div>
+
+                    <div class="game-site" data-is-scam="false">
+                        <span class="site-badge safe">Safe</span>
+                        <span class="site-badge scam">Scam!</span>
+                        <div class="site-url">dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion</div>
+                        <div class="site-content">
+                            Welcome to Dread - The Reddit of Darknet. Community discussions, verified markets list, and security tips.
+                        </div>
+                        <div class="site-features">
+                            <p>• Established community (3+ years)</p>
+                            <p>• Consistent uptime history</p>
+                            <p>• No urgent money requests</p>
+                            <p>• Matches known legitimate address pattern</p>
+                        </div>
+                    </div>
+
+                    <div class="game-site" data-is-scam="true">
+                        <span class="site-badge safe">Safe</span>
+                        <span class="site-badge scam">Scam!</span>
+                        <div class="site-url">empir3market6jumyn.onion</div>
+                        <div class="site-content">
+                            Empire Market - Back Online! Log in now to recover your funds from our previous <span class="term" data-term="exit-scam">exit</span>. 
+                            Special access fee: 0.001 BTC.
+                        </div>
+                        <div class="site-features">
+                            <p>• Claims to be a previously <span class="term" data-term="exit-scam">exit-scammed</span> market</p>
+                            <p>• Requires payment for access</p>
+                            <p>• Misspelled name with numbers</p>
+                            <p>• Different URL than original market</p>
+                        </div>
+                    </div>
+
+                    <div class="game-site" data-is-scam="false">
+                        <span class="site-badge safe">Safe</span>
+                        <span class="site-badge scam">Scam!</span>
+                        <div class="site-url">privacyintyqcroe.onion</div>
+                        <div class="site-content">
+                            Privacy International - Advocating for strong digital privacy rights through research and legal action. Donations welcome but not required.
+                        </div>
+                        <div class="site-features">
+                            <p>• Matches legitimate organization</p>
+                            <p>• Consistent with public mission</p>
+                            <p>• No urgent money requests</p>
+                            <p>• Information focused rather than transaction focused</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Risk Analyzer Tool</h2>
+            <div class="analyzer">
+                <p>Enter a .onion URL to analyze potential risks:</p>
+                <div class="analyzer-input">
+                    <input type="text" id="analyzer-input" placeholder="darkexample123abc.onion">
+                    <button id="analyze-btn">Analyze</button>
+                </div>
+                <div class="analyzer-results" id="analyzer-results">
+                    <div class="progress-container">
+                        <div class="progress-bar" id="analysis-progress"></div>
+                    </div>
+                    <div class="risk-level">
+                        <div>Low Risk</div>
+                        <div>Medium Risk</div>
+                        <div>High Risk</div>
+                    </div>
+                    <div class="risk-meter">
+                        <div class="risk-indicator" id="risk-indicator"></div>
+                        <div class="risk-detail" id="risk-detail">Analyzing...</div>
+                    </div>
+                    <div id="analysis-details"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Hidden Content Discovery</h2>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-title">Hidden Content Tools</div>
+                </div>
+                <div class="terminal-content">
+                    <div class="output-line">The dark web often contains hidden messages and encoded data.</div>
+                    <div class="output-line">Practice your <span class="term" data-term="steganography">steganography</span> and decoding skills below:</div>
+                    
+                    <div class="base64-section">
+                        <h4>Base64 Decoder</h4>
+                        <p>Decode hidden <span class="term" data-term="base64">Base64</span> messages:</p>
+                        <input type="text" class="base64-input" id="base64-input" placeholder="Enter Base64 text...">
+                        <button class="reveal-btn" id="decode-base64">Decode</button>
+                        <div class="base64-output" id="base64-output"></div>
+                    </div>
+                    
+                    <div class="hover-area" id="hover-area">
+                        Hover over this area to reveal hidden information...
+                    </div>
+                    <div class="hidden-message" id="hidden-message">
+                        <div class="warning">Hidden content discovered!</div>
+                        <p>You've found a secret message. On dark web sites, information is often hidden in plain sight using simple CSS techniques.</p>
+                        <p>Always inspect page source code and look for hidden divs or content with opacity:0.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="disclaimer">
+            <strong>Educational Purpose Only:</strong> This simulator is designed purely for educational purposes to help users identify suspicious websites and learn about online safety. This tool does not provide access to actual dark web content or illegal services.
+        </div>
+        
+        <footer>
+            <p>Dark Web Analysis Training Portal - Cybersecurity Education</p>
+            <p>Project Documentation: <a href="https://dioram8.github.io/projectdoc/" class="external-link" target="_blank">https://dioram8.github.io/projectdoc/</a></p>
+        </footer>
+    </div>
+
+    <div class="modal" id="game-modal">
+        <div class="modal-content">
+            <button class="close-btn" id="close-modal">&times;</button>
+            <h3 class="modal-title" id="modal-title">Site Analysis</h3>
+            <div id="modal-content"></div>
+            <button class="reveal-btn" id="reveal-answer">Reveal Answer</button>
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        // Terminal functionality - Improved with more robust command handling
+        const terminal = document.getElementById('terminal-content');
+        const cmdInput = document.getElementById('cmd-input');
+        const terminalCommands = {
+            'help': function() {
+                return 'Available commands:\n' +
+                       'help - Display this help message\n' +
+                       'visit [.onion URL] - Visit a .onion site\n' +
+                       'clear - Clear terminal screen\n' +
+                       'analyze [.onion URL] - Analyze site risk\n' +
+                       'info [topic] - Get information on a topic\n' +
+                       'scan [.onion URL] - Perform a security scan\n' + 
+                       'exit - Exit terminal session';
+            },
+            'clear': function() {
+                terminal.innerHTML = '';
+                return '';
+            },
+            'exit': function() {
+                return 'Cannot exit secure terminal. Access maintained for educational purposes.';
+            },
+            'visit': function(args) {
+                if (!args) return 'Usage: visit [.onion URL]';
+                
+                const siteInfo = {
+                    'duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion': {
+                        name: 'DuckDuckGo',
+                        desc: 'A privacy-focused search engine.',
+                        risk: 'Low risk: Verified legitimate service.'
+                    },
+                    'darkwallt3xrqdvc.onion': {
+                        name: 'Dark Wallet (SUSPICIOUS)',
+                        desc: 'Claims to be a cryptocurrency wallet service.',
+                        risk: 'High risk: Likely scam. Too-good-to-be-true offers and misspelled name.'
+                    },
+                    'dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion': {
+                        name: 'Dread Forum',
+                        desc: 'Darknet discussion forum, often called "the Reddit of the darknet".',
+                        risk: 'Medium risk: Legitimate forum but verify the exact URL carefully.'
+                    },
+                    'empir3market6jumyn.onion': {
+                        name: 'Empire Market Clone (SUSPICIOUS)',
+                        desc: 'Claims to be the famous Empire Market that exit-scammed in 2020.',
+                        risk: 'High risk: Classic phishing attempt using a previously trusted name.'
+                    },
+                    'privacyintyqcroe.onion': {
+                        name: 'Privacy International',
+                        desc: 'Non-profit organization advocating for digital privacy rights.',
+                        risk: 'Low risk: Legitimate advocacy organization.'
+                    },
+                    'y7xbsnmucbcwjjnb.onion': {
+                        name: 'Unknown Market',
+                        desc: 'Marketplace with no history or verification.',
+                        risk: 'High risk: No established reputation or verification.'
+                    },
+                    'dioram8.github.io/projectdoc/': {
+                        name: 'Project Documentation',
+                        desc: 'External project documentation site.',
+                        risk: 'Low risk: External clearnet site with project information.'
+                    }
+                };
+                
+                if (siteInfo[args]) {
+                    return `Connecting to ${args}...\nSite: ${siteInfo[args].name}\nDescription: ${siteInfo[args].desc}\nRisk Assessment: ${siteInfo[args].risk}`;
+                } else {
+                    return `Attempting connection to ${args}...\nSite not found in database.\nCaution: Unverified sites may pose security risks.`;
+                }
+            },
+            'analyze': function(args) {
+                if (!args) return 'Usage: analyze [.onion URL]';
+                
+                const analyzerResult = analyzeUrl(args);
+                return `Analyzing ${args}...\n${analyzerResult}\n\nFor detailed analysis, use the Risk Analyzer Tool in the user interface.`;
+            },
+            'info': function(args) {
+                const topics = {
+                    'tor': 'The Onion Router (Tor) is specialized software that allows users to browse the web anonymously by routing traffic through multiple servers and encrypting it at each step.',
+                    'opsec': 'Operational Security (OPSEC) refers to the practice of protecting critical information from potential adversaries by identifying, controlling, and protecting unclassified information.',
+                    'pgp': 'Pretty Good Privacy (PGP) is an encryption program that provides cryptographic privacy and authentication for data communication. On the dark web, it\'s essential for verifying identities.',
+                    'markets': 'Darknet markets are commercial websites that operate via darknets such as Tor. They primarily function as black markets, selling goods that cannot be sold on regular clearnet websites.',
+                    'exit-scam': 'An exit scam occurs when a trusted entity (like a marketplace) that holds user funds suddenly shuts down and disappears with all the money, leaving users unable to recover their deposits.',
+                    'phishing': 'Phishing attacks on the dark web involve creating fake versions of popular sites to steal login credentials and cryptocurrency. Always verify .onion addresses carefully.',
+                    'steganography': 'The practice of concealing messages or information within other non-secret text or data. On the dark web, steganography is often used to hide communications in plain sight.'
+                };
+                
+                if (!args) {
+                    return 'Usage: info [topic]\nAvailable topics: tor, opsec, pgp, markets, exit-scam, phishing, steganography';
+                }
+                
+                return topics[args.toLowerCase()] || `No information available on topic: ${args}`;
+            },
+            'scan': function(args) {
+                if (!args) return 'Usage: scan [.onion URL]';
+                
+                return `Security scan initiated for ${args}...\n` +
+                       `Checking SSL/TLS... No certificate found.\n` +
+                       `Checking site age... Unable to determine.\n` +
+                       `Checking for known phishing patterns... No definitive match.\n` +
+                       `Recommendation: Exercise caution. Manual analysis required.`;
+            }
+        };
+
+        // Function to handle terminal command execution
+        function executeCommand(cmdText) {
+            const args = cmdText.trim().split(' ');
+            const cmd = args.shift().toLowerCase();
+            const cmdArgs = args.join(' ');
+            
+            const outputLine = document.createElement('div');
+            outputLine.className = 'output-line';
+            outputLine.innerHTML = `<span class="prompt">root@onion:~$</span> <span class="command">${cmdText}</span>`;
+            terminal.appendChild(outputLine);
+            
+            let response = '';
+            if (terminalCommands[cmd]) {
+                response = terminalCommands[cmd](cmdArgs);
+            } else {
+                response = `Command not found: ${cmd}`;
+            }
+            
+            // Split response by newlines and add each as a separate line
+            response.split('\n').forEach(line => {
+                const responseLine = document.createElement('div');
+                responseLine.className = 'output-line';
+                responseLine.textContent = line;
+                terminal.appendChild(responseLine);
+            });
+            
+            // Auto-scroll to bottom
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        // Function to handle terminal input
+        cmdInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmdText = this.value.trim();
+                if (cmdText) {
+                    executeCommand(cmdText);
+                    this.value = '';
+                }
+            }
+        });
+
+        // Initialize tooltip functionality
+        const tooltip = document.getElementById('tooltip');
+        const terms = document.querySelectorAll('.term');
+        
+        const tooltipContent = {
+            'tor': {
+                title: 'The Onion Router (TOR)',
+                content: 'A specialized network that enables anonymous communication. TOR directs internet traffic through a worldwide overlay network to conceal a user\'s location and usage from surveillance and traffic analysis.'
+            },
+            'exit-scam': {
+                title: 'Exit Scam',
+                content: 'A fraudulent practice where an established business stops shipping orders while continuing to receive payment for new orders. In darknet markets, administrators may suddenly shut down sites and disappear with users\' cryptocurrency.'
+            },
+            'steganography': {
+                title: 'Steganography',
+                content: 'The practice of concealing messages or information within other non-secret text or data. On the dark web, steganography is often used to hide communications in plain sight.'
+            },
+            'base64': {
+                title: 'Base64 Encoding',
+                content: 'A binary-to-text encoding scheme that represents binary data in an ASCII string format. Often used to obscure information or transmit binary data through text-based systems.'
+            }
+        };
+        
+        terms.forEach(term => {
+            term.addEventListener('mouseenter', function(e) {
+                const termType = this.getAttribute('data-term');
+                if (tooltipContent[termType]) {
+                    tooltip.innerHTML = `<div class="tooltip-title">${tooltipContent[termType].title}</div><div>${tooltipContent[termType].content}</div>`;
+                    tooltip.style.left = (e.pageX + 10) + 'px';
+                    tooltip.style.top = (e.pageY + 10) + 'px';
+                    tooltip.style.display = 'block';
+                }
+            });
+            
+            term.addEventListener('mouseleave', function() {
+                tooltip.style.display = 'none';
+            });
+        });
+
+        // Risk analysis function
+        function analyzeUrl(url) {
+            // Simple risk analysis heuristics
+            let risk = 'Medium';
+            let flags = [];
+            
+            // Check for common red flags
+            if (url.includes('wallet') || url.includes('bitcoin') || url.includes('btc')) {
+                risk = 'High';
+                flags.push('Cryptocurrency-related services require extra scrutiny');
+            }
+            
+            if (/\d/.test(url) && url.match(/\d/g).length > 2) {
+                risk = 'High';
+                flags.push('Excessive numbers in domain may indicate phishing');
+            }
+            
+            if (url.length < 16 && url.endsWith('.onion')) {
+                risk = 'High';
+                flags.push('Unusually short .onion address - may be a scam site');
+            }
+            
+            if (url.includes('market') || url.includes('empire') || url.includes('silk')) {
+                flags.push('Marketplace-related term detected');
+            }
+            
+            // Known safe sites
+            const knownSafeSites = [
+                'duckduckgogg42xjoc72x3sjasowoarfbgcmvfimaftt6twagswzczad.onion',
+                'privacyintyqcroe.onion',
+                'dreadytofatroptsdj6io7l3xptbet6onoyno2yv7jicoxknyazubrad.onion'
+            ];
+            
+            if (knownSafeSites.includes(url)) {
+                risk = 'Low';
+                flags = ['Site is in database of known legitimate services'];
+            }
+            
+            // Known scam sites
+            const knownScamSites = [
+                'darkwallt3xrqdvc.onion',
+                'empir3market6jumyn.onion'
+            ];
+            
+            if (knownScamSites.includes(url)) {
+                risk = 'Very High';
+                flags = ['Site is in database of known scams'];
+            }
+            
+            return `Risk Assessment: ${risk}\n${flags.map(f => '• ' + f).join('\n')}`;
+        }
+
+        // Risk analyzer tool functionality
+        const analyzerInput = document.getElementById('analyzer-input');
+        const analyzeBtn = document.getElementById('analyze-btn');
+        const analyzerResults = document.getElementById('analyzer-results');
+        const analysisProgress = document.getElementById('analysis-progress');
+        const riskIndicator = document.getElementById('risk-indicator');
+        const riskDetail = document.getElementById('risk-detail');
+        const analysisDetails = document.getElementById('analysis-details');
+        
+        analyzeBtn.addEventListener('click', function() {
+            const url = analyzerInput.value.trim();
+            if (!url) return;
+            
+            // Show results container
+            analyzerResults.style.display = 'block';
+            
+            // Reset and animate progress bar
+            analysisProgress.style.width = '0%';
+            setTimeout(() => {
+                analysisProgress.style.width = '100%';
+            }, 100);
+            
+            // Simulate analysis delay
+            setTimeout(() => {
+                // Calculate risk level
+                let riskLevel = 'medium';
+                let riskPercentage = 50;
+                
+                if (url.includes('duck') || url.includes('privacy')) {
+                    riskLevel = 'low';
+                    riskPercentage = 15;
+                } else if (url.includes('wallet') || url.includes('market') || url.includes('bitcoin')) {
+                    riskLevel = 'high';
+                    riskPercentage = 85;
+                }
+                
+                // Update risk indicator
+                riskIndicator.className = 'risk-indicator ' + riskLevel;
+                riskDetail.textContent = `Risk Level: ${riskLevel.charAt(0).toUpperCase() + riskLevel.slice(1)}`;
+                
+                // Generate detailed analysis
+                const analysis = analyzeUrl(url);
+                analysisDetails.innerHTML = `<h3>Analysis for ${url}</h3><pre>${analysis}</pre>`;
+                
+                if (riskLevel === 'high') {
+                    analysisDetails.innerHTML += `
+                        <p class="warning">WARNING: This site has multiple high-risk indicators. Not recommended for access.</p>
+                        <ul>
+                            <li>Uses deceptive naming or practices</li>
+                            <li>May be attempting to steal cryptocurrency</li>
+                            <li>Could be a honeypot or phishing operation</li>
+                        </ul>
+                    `;
+                }
+            }, 1500);
+        });
+
+        // Site detection game functionality
+        const gameSites = document.querySelectorAll('.game-site');
+        const gameModal = document.getElementById('game-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const closeModal = document.getElementById('close-modal');
+        const revealAnswer = document.getElementById('reveal-answer');
+        
+        let currentSite = null;
+        
+        gameSites.forEach(site => {
+            site.addEventListener('click', function() {
+                currentSite = this;
+                const isScam = this.getAttribute('data-is-scam') === 'true';
+                const url = this.querySelector('.site-url').textContent;
+                const content = this.querySelector('.site-content').innerHTML;
+                const features = this.querySelector('.site-features').innerHTML;
+                
+                modalTitle.textContent = `Analysis: ${url}`;
+                modalContent.innerHTML = `
+                    <p>Site Content:</p>
+                    <div class="code-section">${content}</div>
+                    
+                    <p>Site Features:</p>
+                    <div class="code-section">${features}</div>
+                    
+                    <div class="risk-assessment">
+                        <button class="reveal-btn" data-answer="safe">Mark as Safe</button>
+                        <button class="reveal-btn" data-answer="scam">Mark as Scam</button>
+                    </div>
+                `;
+                
+                // Set up answer buttons
+                const answerButtons = modalContent.querySelectorAll('[data-answer]');
+                answerButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        const answer = this.getAttribute('data-answer');
+                        const isCorrect = (answer === 'scam' && isScam) || (answer === 'safe' && !isScam);
+                        
+                        modalContent.innerHTML += `
+                            <div class="${isCorrect ? 'info' : 'warning'}">
+                                Your answer: ${answer.toUpperCase()}<br>
+                                ${isCorrect ? 'Correct!' : 'Incorrect!'} This site is ${isScam ? 'a SCAM' : 'SAFE'}.
+                            </div>
+                            <div class="code-section">
+                                ${isScam ? 
+                                    'Red flags detected: Urgent offers, misspelled names, requests for cryptocurrency, or claims to recover lost funds are common scam indicators.' :
+                                    'Safety indicators: Established history, matches known legitimate services, no urgent requests for funds, information-focused rather than transaction-focused.'}
+                            </div>
+                        `;
+                        
+                        // Show the badge on the game site
+                        if (currentSite) {
+                            const safeBadge = currentSite.querySelector('.safe');
+                            const scamBadge = currentSite.querySelector('.scam');
+                            
+                            if (isScam) {
+                                scamBadge.style.display = 'block';
+                                safeBadge.style.display = 'none';
+                            } else {
+                                safeBadge.style.display = 'block';
+                                scamBadge.style.display = 'none';
+                            }
+                        }
+                        
+                        // Disable answer buttons
+                        answerButtons.forEach(btn => btn.disabled = true);
+                    });
+                });
+                
+                revealAnswer.style.display = 'none';
+                gameModal.style.display = 'flex';
+            });
+        });
+        
+        closeModal.addEventListener('click', function() {
+            gameModal.style.display = 'none';
+        });
+        
+        // Hidden content functionality
+        const hoverArea = document.getElementById('hover-area');
+        const hiddenMessage = document.getElementById('hidden-message');
+        
+        hoverArea.addEventListener('mouseenter', function() {
+            hiddenMessage.style.opacity = '1';
+        });
+        
+        hoverArea.addEventListener('mouseleave', function() {
+            hiddenMessage.style.opacity = '0';
+        });
+        
+        // Base64 decoder functionality
+        const base64Input = document.getElementById('base64-input');
+        const decodeBase64 = document.getElementById('decode-base64');
+        const base64Output = document.getElementById('base64-output');
+        
+        decodeBase64.addEventListener('click', function() {
+            const input = base64Input.value.trim();
+            if (!input) return;
+            
+            try {
+                const decoded = atob(input);
+                base64Output.textContent = decoded;
+                base64Output.style.display = 'block';
+            } catch (e) {
+                base64Output.textContent = 'Error: Invalid Base64 input';
+                base64Output.style.display = 'block';
+            }
+        });
+
+        // Initialize with some content in the terminal
+        setTimeout(() => {
+            executeCommand('info tor');
+        }, 1000);
+    </script>
+</body>
+</html>
+               
